@@ -212,8 +212,15 @@ export function handleTransfer(event: Transfer): void {
 
 export function handleSync(event: Sync): void {
   let pair = Pair.load(event.address.toHex())
+
+  if(!pair) return
+
   let token0 = Token.load(pair.token0)
+  if(!token0) return
+
   let token1 = Token.load(pair.token1)
+  if(!token1) return
+
   let uniswap = UniswapFactory.load(FACTORY_ADDRESS)
 
   // reset factory liquidity by subtracting onluy tarcked liquidity
@@ -281,11 +288,13 @@ export function handleMint(event: Mint): void {
   let mint = MintEvent.load(mints[mints.length - 1])
 
   let pair = Pair.load(event.address.toHex())
+  if(!pair) return
   let uniswap = UniswapFactory.load(FACTORY_ADDRESS)
 
   let token0 = Token.load(pair.token0)
+  if(!token0) return
   let token1 = Token.load(pair.token1)
-
+  if(!token1) return
   // update exchange info (except balances, sync will cover that)
   let token0Amount = convertTokenToDecimal(event.params.amount0, token0.decimals)
   let token1Amount = convertTokenToDecimal(event.params.amount1, token1.decimals)
@@ -347,11 +356,14 @@ export function handleBurn(event: Burn): void {
   let burn = BurnEvent.load(burns[burns.length - 1])
 
   let pair = Pair.load(event.address.toHex())
+  if(!pair) return
   let uniswap = UniswapFactory.load(FACTORY_ADDRESS)
 
   //update token info
   let token0 = Token.load(pair.token0)
+  if (!token0) return
   let token1 = Token.load(pair.token1)
+  if (!token1) return
   let token0Amount = convertTokenToDecimal(event.params.amount0, token0.decimals)
   let token1Amount = convertTokenToDecimal(event.params.amount1, token1.decimals)
 
@@ -404,8 +416,11 @@ export function handleBurn(event: Burn): void {
 
 export function handleSwap(event: Swap): void {
   let pair = Pair.load(event.address.toHexString())
+  if (!pair) return
   let token0 = Token.load(pair.token0)
+  if (!token0) return
   let token1 = Token.load(pair.token1)
+  if (!token1) return
   let amount0In = convertTokenToDecimal(event.params.amount0In, token0.decimals)
   let amount1In = convertTokenToDecimal(event.params.amount1In, token1.decimals)
   let amount0Out = convertTokenToDecimal(event.params.amount0Out, token0.decimals)
