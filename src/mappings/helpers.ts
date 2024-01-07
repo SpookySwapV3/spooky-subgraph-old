@@ -99,7 +99,14 @@ export function fetchTokenName(tokenAddress: Address): string {
   return nameValue
 }
 
+const SKIP_TOTAL_SUPPLY: string[] = [
+  "0x0000000000bf2686748e1c0255036e7617e7e8a5"
+]
+
 export function fetchTokenTotalSupply(tokenAddress: Address): BigInt {
+  if (SKIP_TOTAL_SUPPLY.includes(tokenAddress.toHexString())) {
+      return BigInt.fromI32(0)
+  }
   let contract = ERC20.bind(tokenAddress)
   let totalSupplyValue = null
   let totalSupplyResult = contract.try_totalSupply()
