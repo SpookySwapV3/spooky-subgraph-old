@@ -108,24 +108,22 @@ export function fetchTokenTotalSupply(tokenAddress: Address): BigInt {
       return BigInt.fromI32(0)
   }
   let contract = ERC20.bind(tokenAddress)
-  let totalSupplyValue = null
   let totalSupplyResult = contract.try_totalSupply()
   if (!totalSupplyResult.reverted) {
-    totalSupplyValue = totalSupplyResult as i32
+    return totalSupplyResult.value
   }
-  return BigInt.fromI32(totalSupplyValue as i32)
+  return BigInt.fromI32(0)
 }
 
 export function fetchTokenDecimals(tokenAddress: Address): BigInt {
 
   let contract = ERC20.bind(tokenAddress)
   // try types uint8 for decimals
-  let decimalValue = null
   let decimalResult = contract.try_decimals()
   if (!decimalResult.reverted) {
-    decimalValue = decimalResult.value
+    return decimalResult.value
   }
-  return BigInt.fromI32(decimalValue as i32)
+  return BigInt.fromI32(0)
 }
 
 export function createLiquidityPosition(exchange: Address, user: Address): LiquidityPosition {
