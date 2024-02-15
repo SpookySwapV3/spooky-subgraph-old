@@ -121,7 +121,7 @@ export function fetchTokenDecimals(tokenAddress: Address): BigInt {
   // try types uint8 for decimals
   let decimalResult = contract.try_decimals()
   if (!decimalResult.reverted) {
-    return decimalResult.value
+    return BigInt.fromI32(decimalResult.value)
   }
   return BigInt.fromI32(0)
 }
