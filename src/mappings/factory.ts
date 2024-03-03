@@ -1,16 +1,16 @@
 /* eslint-disable prefer-const */
 import { log } from '@graphprotocol/graph-ts'
-import { UniswapFactory, Pair, Token, Bundle } from '../types/schema'
 import { PairCreated } from '../types/Factory/Factory'
+import { Bundle, Pair, Token, UniswapFactory } from '../types/schema'
 import { Pair as PairTemplate } from '../types/templates'
 import {
   FACTORY_ADDRESS,
-  ZERO_BD,
-  ZERO_BI,
-  fetchTokenSymbol,
-  fetchTokenName,
   fetchTokenDecimals,
-  fetchTokenTotalSupply
+  fetchTokenName,
+  fetchTokenSymbol,
+  fetchTokenTotalSupply,
+  ZERO_BD,
+  ZERO_BI
 } from './helpers'
 
 export function handleNewPair(event: PairCreated): void {
@@ -45,6 +45,7 @@ export function handleNewPair(event: PairCreated): void {
     token0.name = fetchTokenName(event.params.token0)
     token0.totalSupply = fetchTokenTotalSupply(event.params.token0)
     let decimals = fetchTokenDecimals(event.params.token0)
+
     // bail if we couldn't figure out the decimals
     if (decimals === null) {
       log.debug('mybug the decimal on token 0 was null', [])
