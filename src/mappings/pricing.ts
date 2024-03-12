@@ -8,9 +8,6 @@ const USDC_MULTI_WETH_PAIR = '0x2b4c76d0dc16be1c31d4c1dc53bf9b45987fc75c' // cre
 const USDC_LZ_WETH_PAIR = '0x90469ACbC4b6d877873CD4f1CCA54fDE8075A998'  // created at block 65245749 usdc is token 1
 const USDC_AXL_WETH_PAIR = '0xa196c7754f4ec79de55bb5db82187bbe82275f7f' // created at block 65318511 usdc is token 0
 
-const USDC_WETH_PAIR = '0xb4e16d0168e52d35cacd2c6185b44281ec28c9dc' // created 10008355
-const DAI_WETH_PAIR = '0xa478c2975ab1ea89e8196811f51a7b7ade33eb11' // created block 10042267
-
 export function getEthPriceInUSD(event: ethereum.Event): BigDecimal {
   
   // We will use the Multi_USDC as the graph pair until we have a new pair to use as reference
