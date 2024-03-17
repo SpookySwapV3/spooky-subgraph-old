@@ -11,7 +11,7 @@ const USDC_AXL_WETH_PAIR = '0xa196c7754f4ec79de55bb5db82187bbe82275f7f' // creat
 export function getEthPriceInUSD(event: ethereum.Event): BigDecimal {
   
   // We will use the Multi_USDC as the graph pair until we have a new pair to use as reference
-  if(event.block.number < BigInt.fromI32(65245750)) {
+  if(event.block.number < BigInt.fromI32(65245749)) {
     let usdcMultiPair = Pair.load(USDC_MULTI_WETH_PAIR); // Usdc is token0
     if (usdcMultiPair !== null) {
       return usdcMultiPair.token0Price
