@@ -287,6 +287,7 @@ export function handleMint(event: Mint): void {
   let transaction = Transaction.load(event.transaction.hash.toHexString())
   if (!transaction) return
   let mints = transaction.mints
+  if(mints.length === 0) return
   let mint = MintEvent.load(mints[mints.length - 1])
   if (!mint) return
 
@@ -353,6 +354,7 @@ export function handleBurn(event: Burn): void {
   }
 
   let burns = transaction.burns
+  if(burns.length === 0) return
   let burn = BurnEvent.load(burns[burns.length - 1])
   if (!burn) return
   let pair = Pair.load(event.address.toHex())
