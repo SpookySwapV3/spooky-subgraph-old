@@ -19,32 +19,23 @@ export class TokenDefinition {
   }
 
   // Get all tokens with a static defintion
-  static getStaticDefinitions(): Array<TokenDefinition> {
-    let staticDefinitions = new Array<TokenDefinition>(1)
-    let tokenWftm = new TokenDefinition(
-      Address.fromString('0x21be370d5312f44cb42ce377bc9b8a0cef1a4c83'),
-      'WFTM',
-      'Wrapped Fantom',
-      BigInt.fromI32(18)
-    )
-    staticDefinitions.push(tokenWftm)
+  // static getStaticDefinitions(): Array<TokenDefinition> {
+  //   const staticDefinitions: Array<TokenDefinition> = 
+  //   [
+  //     {
+  //       address: Address.fromString('0x21be370d5312f44cb42ce377bc9b8a0cef1a4c83'),
+  //       symbol: 'WFTM',
+  //       name: 'Wrapped Fantom',
+  //       decimals: BigInt.fromI32(18)
+  //     }
+  //   ]
 
-    return staticDefinitions
-  }
+  //   return staticDefinitions
+  // }
 
   // Helper for hardcoded tokens
+  // Compiler shits the bed when trying to compiled getStaticDefinitions so I removed it
   static fromAddress(tokenAddress: Address) : TokenDefinition | null {
-    let staticDefinitions = this.getStaticDefinitions()
-    let tokenAddressHex = tokenAddress.toHexString()
-
-    // Search the definition using the address
-    for (let i = 0; i < staticDefinitions.length; i++) {
-      let staticDefinition = staticDefinitions[i]
-      if(staticDefinition.address.toHexString() == tokenAddressHex) {
-        return staticDefinition
-      }
-    }
-
     // If not found, return null
     return null
   }

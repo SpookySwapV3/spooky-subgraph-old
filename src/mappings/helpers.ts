@@ -59,10 +59,10 @@ export function isNullEthValue(value: string): boolean {
 
 export function fetchTokenSymbol(tokenAddress: Address): string {
   // static definitions overrides
-  let staticDefinition = TokenDefinition.fromAddress(tokenAddress)
-  if (staticDefinition != null) {
-    return (staticDefinition as TokenDefinition).symbol
-  }
+  // let staticDefinition = TokenDefinition.fromAddress(tokenAddress)
+  // if (staticDefinition) {
+  //   return (staticDefinition as TokenDefinition).symbol
+  // }
 
   let contract = ERC20.bind(tokenAddress)
   let contractSymbolBytes = ERC20SymbolBytes.bind(tokenAddress)
@@ -87,10 +87,10 @@ export function fetchTokenSymbol(tokenAddress: Address): string {
 
 export function fetchTokenName(tokenAddress: Address): string {
   // static definitions overrides
-  let staticDefinition = TokenDefinition.fromAddress(tokenAddress)
-  if (staticDefinition != null) {
-    return (staticDefinition as TokenDefinition).name
-  }
+  // let staticDefinition = TokenDefinition.fromAddress(tokenAddress)
+  // if (staticDefinition) {
+  //   return (staticDefinition as TokenDefinition).name
+  // }
 
   let contract = ERC20.bind(tokenAddress)
   let contractNameBytes = ERC20NameBytes.bind(tokenAddress)
@@ -134,10 +134,10 @@ export function fetchTokenTotalSupply(tokenAddress: Address): BigInt {
 
 export function fetchTokenDecimals(tokenAddress: Address): BigInt {
   // static definitions overrides
-  let staticDefinition = TokenDefinition.fromAddress(tokenAddress)
-  if (staticDefinition != null) {
-    return (staticDefinition as TokenDefinition).decimals
-  }
+  // let staticDefinition = TokenDefinition.fromAddress(tokenAddress)
+  // if (staticDefinition) {
+  //   return (staticDefinition as TokenDefinition).decimals
+  // }
 
   let contract = ERC20.bind(tokenAddress)
   let decimalResult = contract.try_decimals()
