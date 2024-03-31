@@ -155,6 +155,7 @@ export function createLiquidityPosition(exchange: Address, user: Address): Liqui
   let liquidityTokenBalance = LiquidityPosition.load(id)
   if (liquidityTokenBalance === null) {
     let pair = Pair.load(exchange.toHexString())
+    //We're logging an error below this implies pair should never be null
     pair!.liquidityProviderCount = pair!.liquidityProviderCount.plus(ONE_BI)
     liquidityTokenBalance = new LiquidityPosition(id)
     liquidityTokenBalance.liquidityTokenBalance = ZERO_BD
@@ -184,7 +185,7 @@ export function createLiquiditySnapshot(position: LiquidityPosition, event: ethe
   if(!pair) return
   let token0 = Token.load(pair.token0)
   let token1 = Token.load(pair.token1)
-  if(!token0 || !token1) return
+  if(!token0 || !token1  || !token0.derivedETH || !token1.derivedETH) return
 
   // create new snapshot
   let snapshot = new LiquidityPositionSnapshot(position.id.concat(timestamp.toString()))
@@ -193,8 +194,8 @@ export function createLiquiditySnapshot(position: LiquidityPosition, event: ethe
   snapshot.block = event.block.number.toI32()
   snapshot.user = position.user
   snapshot.pair = position.pair
-  snapshot.token0PriceUSD = token0.derivedETH!.times(bundle.ethPrice)
-  snapshot.token1PriceUSD = token1.derivedETH!.times(bundle.ethPrice)
+  snapshot.token0PriceUSD = token0.derivedETH.times(bundle.ethPrice)
+  snapshot.token1PriceUSD = token1.derivedETH.times(bundle.ethPrice)
   snapshot.reserve0 = pair.reserve0
   snapshot.reserve1 = pair.reserve1
   snapshot.reserveUSD = pair.reserveUSD

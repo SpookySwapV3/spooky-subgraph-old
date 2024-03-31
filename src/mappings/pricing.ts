@@ -52,7 +52,7 @@ let WHITELIST: string[] = [
 let MINIMUM_USD_THRESHOLD_NEW_PAIRS = BigDecimal.fromString('10000')
 
 // minimum liquidity for price to get tracked
-let MINIMUM_LIQUIDITY_THRESHOLD_ETH = BigDecimal.fromString('200')
+let MINIMUM_LIQUIDITY_THRESHOLD_ETH = BigDecimal.fromString('20000')
 
 /**
  * Search through graph to find derived Eth per token.
@@ -95,8 +95,9 @@ export function getTrackedVolumeUSD(
   pair: Pair
 ): BigDecimal {
   let bundle = Bundle.load('1')
-  let price0 = token0.derivedETH!.times(bundle!.ethPrice)
-  let price1 = token1.derivedETH!.times(bundle!.ethPrice)
+  if (!bundle || !token0.derivedETH || !token1.derivedETH) return ZERO_BD
+  let price0 = token0.derivedETH.times(bundle.ethPrice)
+  let price1 = token1.derivedETH.times(bundle.ethPrice)
 
   // dont count tracked volume on these pairs - usually rebass tokens
   if (UNTRACKED_PAIRS.includes(pair.id)) {
@@ -159,8 +160,11 @@ export function getTrackedLiquidityUSD(
   token1: Token
 ): BigDecimal {
   let bundle = Bundle.load('1')
-  let price0 = token0.derivedETH!.times(bundle!.ethPrice)
-  let price1 = token1.derivedETH!.times(bundle!.ethPrice)
+
+  if(!bundle || !token0.derivedETH || !token1.derivedETH) return ZERO_BD
+
+  let price0 = token0.derivedETH.times(bundle.ethPrice)
+  let price1 = token1.derivedETH.times(bundle.ethPrice)
 
   // both are whitelist tokens, take average of both amounts
   if (WHITELIST.includes(token0.id) && WHITELIST.includes(token1.id)) {
