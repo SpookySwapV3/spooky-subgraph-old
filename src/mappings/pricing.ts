@@ -5,7 +5,7 @@ import { ZERO_BD, factoryContract, ADDRESS_ZERO, ONE_BD, UNTRACKED_PAIRS } from 
 
 const WNATIVE_ADDRESS = '0x23181F21DEa5936e24163FFABa4Ea3B316B57f3C'
 const USDT_T_WBTT = '0x418AFCD6D15fA51d59d6C7F7A5943eB04D5F21f0' // created block 26857087
-const USDC_WBTT = '0x98A647f4A1Fe1dc58Fc1A107468151bBe2b5A627' // created 27823408 
+const USDC_WBTT = '0x98A647f4A1Fe1dc58Fc1A107468151bBe2b5A627' // created 27823408 usdc is token1 
 
 export function getEthPriceInUSD(event: ethereum.Event): BigDecimal {
   // fetch eth prices for each stablecoin
@@ -28,7 +28,7 @@ if (usdtNativePair !== null && usdcNativePair !== null) {
 
 // token where amounts should contribute to tracked volume and liquidity
 let WHITELIST: string[] = [
-  WNATIVE_ADDRESS,
+  '0x23181F21DEa5936e24163FFABa4Ea3B316B57f3C', // WBTTC
   '0xAD9A21FF0c9d854cA8C1360AF28D4fcbDaC53B4F', // FTM_e
   '0x43559B1786C06d6B826e3cf9AA667eD8840f9106', // ADA_b
   '0x1249C65AfB11D179FFB3CE7D4eEDd1D9b98AD006', // ETH
