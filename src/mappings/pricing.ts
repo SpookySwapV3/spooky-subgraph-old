@@ -5,20 +5,11 @@ import { ZERO_BD, factoryContract, ADDRESS_ZERO, ONE_BD, UNTRACKED_PAIRS } from 
 
 const WNATIVE_ADDRESS = '0x23181F21DEa5936e24163FFABa4Ea3B316B57f3C'
 const USDT_T_WBTT = '0x418AFCD6D15fA51d59d6C7F7A5943eB04D5F21f0' // created block 26857087
-const USDC_WBTT = '0x98A647f4A1Fe1dc58Fc1A107468151bBe2b5A627' // created 27823408 usdc is token1 
 
 export function getEthPriceInUSD(event: ethereum.Event): BigDecimal {
   // fetch eth prices for each stablecoin
   let usdtNativePair = Pair.load(USDT_T_WBTT) // usdc is token1
-  let usdcNativePair = Pair.load(USDC_WBTT) // usdc is token1
-
-if (usdtNativePair !== null && usdcNativePair !== null) {
-    let totalLiquidityETH = usdtNativePair.reserve0.plus(usdcNativePair.reserve0)
-    let stableWight = usdtNativePair.reserve0.div(totalLiquidityETH)
-    let otherStableWeight = usdcNativePair.reserve0.div(totalLiquidityETH)
-    return usdtNativePair.token1Price.times(stableWight).plus(usdcNativePair.token1Price.times(otherStableWeight))
-    // USDC is the only pair so far
-  } else if (usdtNativePair !== null) {
+  if (usdtNativePair !== null) {
     return usdtNativePair.token1Price
   } else {
     return ZERO_BD
