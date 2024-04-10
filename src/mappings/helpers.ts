@@ -132,7 +132,7 @@ export function fetchTokenTotalSupply(tokenAddress: Address): BigInt {
   return BigInt.fromI32(0)
 }
 
-export function fetchTokenDecimals(tokenAddress: Address): BigInt {
+export function fetchTokenDecimals(tokenAddress: Address): BigInt | null {
   // static definitions overrides
   // let staticDefinition = TokenDefinition.fromAddress(tokenAddress)
   // if (staticDefinition) {
@@ -140,11 +140,15 @@ export function fetchTokenDecimals(tokenAddress: Address): BigInt {
   // }
 
   let contract = ERC20.bind(tokenAddress)
+  // try types uint8 for decimals
   let decimalResult = contract.try_decimals()
   if (!decimalResult.reverted) {
-    return BigInt.fromI32(decimalResult.value)
+    let decimalValue = BigInt.fromI32(decimalResult.value as i32)
+    if (decimalValue.lt(BigInt.fromI32(255))) {
+      return decimalValue
+    }
   }
-  return BigInt.fromI32(0)
+  return null
 }
 
 export function createLiquidityPosition(exchange: Address, user: Address): LiquidityPosition {
