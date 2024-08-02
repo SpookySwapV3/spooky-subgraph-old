@@ -1,14 +1,15 @@
 /* eslint-disable prefer-const */
-import { log, BigInt, BigDecimal, Address, ethereum } from '@graphprotocol/graph-ts'
+import { Address, BigDecimal, BigInt } from '@graphprotocol/graph-ts'
+
 import { ERC20 } from '../types/Factory/ERC20'
-import { ERC20SymbolBytes } from '../types/Factory/ERC20SymbolBytes'
 import { ERC20NameBytes } from '../types/Factory/ERC20NameBytes'
-import { User, Bundle, Token, LiquidityPosition, LiquidityPositionSnapshot, Pair } from '../types/schema'
+import { ERC20SymbolBytes } from '../types/Factory/ERC20SymbolBytes'
+import { User } from '../types/schema'
 import { Factory as FactoryContract } from '../types/templates/Pair/Factory'
 import { TokenDefinition } from './tokenDefinition'
 
 export const ADDRESS_ZERO = '0x0000000000000000000000000000000000000000'
-export const FACTORY_ADDRESS = '0xee4bc42157cf65291ba2fe839ae127e3cc76f741'
+export const FACTORY_ADDRESS = '0xEE4bC42157cf65291Ba2FE839AE127e3Cc76f741'
 
 export let ZERO_BI = BigInt.fromI32(0)
 export let ONE_BI = BigInt.fromI32(1)
@@ -59,10 +60,10 @@ export function isNullEthValue(value: string): boolean {
 
 export function fetchTokenSymbol(tokenAddress: Address): string {
   // static definitions overrides
-  // let staticDefinition = TokenDefinition.fromAddress(tokenAddress)
-  // if (staticDefinition) {
-  //   return (staticDefinition as TokenDefinition).symbol
-  // }
+  let staticDefinition = TokenDefinition.fromAddress(tokenAddress)
+  if (staticDefinition != null) {
+    return (staticDefinition as TokenDefinition).symbol
+  }
 
   let contract = ERC20.bind(tokenAddress)
   let contractSymbolBytes = ERC20SymbolBytes.bind(tokenAddress)
@@ -87,10 +88,10 @@ export function fetchTokenSymbol(tokenAddress: Address): string {
 
 export function fetchTokenName(tokenAddress: Address): string {
   // static definitions overrides
-  // let staticDefinition = TokenDefinition.fromAddress(tokenAddress)
-  // if (staticDefinition) {
-  //   return (staticDefinition as TokenDefinition).name
-  // }
+  let staticDefinition = TokenDefinition.fromAddress(tokenAddress)
+  if (staticDefinition != null) {
+    return (staticDefinition as TokenDefinition).name
+  }
 
   let contract = ERC20.bind(tokenAddress)
   let contractNameBytes = ERC20NameBytes.bind(tokenAddress)
@@ -113,62 +114,38 @@ export function fetchTokenName(tokenAddress: Address): string {
   return nameValue
 }
 
-// HOT FIX: we cant implement try catch for overflow catching so skip total supply parsing on these tokens that overflow 
-// TODO: find better way to handle overflow 
-let SKIP_TOTAL_SUPPLY: string[] = [
-  "0x0000000000bf2686748e1c0255036e7617e7e8a5"
-]
+// HOT FIX: we cant implement try catch for overflow catching so skip total supply parsing on these tokens that overflow
+// TODO: find better way to handle overflow
+let SKIP_TOTAL_SUPPLY: string[] = ['0x0000000000bf2686748e1c0255036e7617e7e8a5']
 
 export function fetchTokenTotalSupply(tokenAddress: Address): BigInt {
   if (SKIP_TOTAL_SUPPLY.includes(tokenAddress.toHexString())) {
     return BigInt.fromI32(0)
   }
-
-  let contract = ERC20.bind(tokenAddress)
-  let totalSupplyResult = contract.try_totalSupply()
+  const contract = ERC20.bind(tokenAddress)
+  let totalSupplyValue = BigInt.zero()
+  const totalSupplyResult = contract.try_totalSupply()
   if (!totalSupplyResult.reverted) {
-    return totalSupplyResult.value
+    totalSupplyValue = totalSupplyResult.value
   }
-  return BigInt.fromI32(0)
+  return totalSupplyValue
 }
 
 export function fetchTokenDecimals(tokenAddress: Address): BigInt | null {
   // static definitions overrides
-  // let staticDefinition = TokenDefinition.fromAddress(tokenAddress)
-  // if (staticDefinition) {
-  //   return (staticDefinition as TokenDefinition).decimals
-  // }
+  let staticDefinition = TokenDefinition.fromAddress(tokenAddress)
+  if (staticDefinition != null) {
+    return (staticDefinition as TokenDefinition).decimals
+  }
 
   let contract = ERC20.bind(tokenAddress)
-  // try types uint8 for decimals
   let decimalResult = contract.try_decimals()
   if (!decimalResult.reverted) {
-    let decimalValue = BigInt.fromI32(decimalResult.value as i32)
-    if (decimalValue.lt(BigInt.fromI32(255))) {
-      return decimalValue
+    if (decimalResult.value.lt(BigInt.fromI32(255))) {
+      return decimalResult.value
     }
   }
   return null
-}
-
-export function createLiquidityPosition(exchange: Address, user: Address): LiquidityPosition {
-  let id = exchange
-    .toHexString()
-    .concat('-')
-    .concat(user.toHexString())
-  let liquidityTokenBalance = LiquidityPosition.load(id)
-  if (liquidityTokenBalance === null) {
-    let pair = Pair.load(exchange.toHexString())
-    pair!.liquidityProviderCount = pair!.liquidityProviderCount.plus(ONE_BI)
-    liquidityTokenBalance = new LiquidityPosition(id)
-    liquidityTokenBalance.liquidityTokenBalance = ZERO_BD
-    liquidityTokenBalance.pair = exchange.toHexString()
-    liquidityTokenBalance.user = user.toHexString()
-    liquidityTokenBalance.save()
-    pair!.save()
-  }
-  if (liquidityTokenBalance === null) log.error('LiquidityTokenBalance is null', [id])
-  return liquidityTokenBalance as LiquidityPosition
 }
 
 export function createUser(address: Address): void {
@@ -178,33 +155,4 @@ export function createUser(address: Address): void {
     user.usdSwapped = ZERO_BD
     user.save()
   }
-}
-
-export function createLiquiditySnapshot(position: LiquidityPosition, event: ethereum.Event): void {
-  let timestamp = event.block.timestamp.toI32()
-  let bundle = Bundle.load('1')
-  if(!bundle) return
-  let pair = Pair.load(position.pair)
-  if(!pair) return
-  let token0 = Token.load(pair.token0)
-  let token1 = Token.load(pair.token1)
-  if(!token0 || !token1) return
-
-  // create new snapshot
-  let snapshot = new LiquidityPositionSnapshot(position.id.concat(timestamp.toString()))
-  snapshot.liquidityPosition = position.id
-  snapshot.timestamp = timestamp
-  snapshot.block = event.block.number.toI32()
-  snapshot.user = position.user
-  snapshot.pair = position.pair
-  snapshot.token0PriceUSD = token0.derivedETH!.times(bundle.ethPrice)
-  snapshot.token1PriceUSD = token1.derivedETH!.times(bundle.ethPrice)
-  snapshot.reserve0 = pair.reserve0
-  snapshot.reserve1 = pair.reserve1
-  snapshot.reserveUSD = pair.reserveUSD
-  snapshot.liquidityTokenTotalSupply = pair.totalSupply
-  snapshot.liquidityTokenBalance = position.liquidityTokenBalance
-  snapshot.liquidityPosition = position.id
-  snapshot.save()
-  position.save()
 }

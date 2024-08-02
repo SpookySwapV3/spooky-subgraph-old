@@ -300,21 +300,17 @@ export class Token extends Entity {
     this.set("totalLiquidity", Value.fromBigDecimal(value));
   }
 
-  get derivedETH(): BigDecimal | null {
+  get derivedETH(): BigDecimal {
     let value = this.get("derivedETH");
     if (!value || value.kind == ValueKind.NULL) {
-      return null;
+      throw new Error("Cannot return null for a required field.");
     } else {
       return value.toBigDecimal();
     }
   }
 
-  set derivedETH(value: BigDecimal | null) {
-    if (!value) {
-      this.unset("derivedETH");
-    } else {
-      this.set("derivedETH", Value.fromBigDecimal(<BigDecimal>value));
-    }
+  set derivedETH(value: BigDecimal) {
+    this.set("derivedETH", Value.fromBigDecimal(value));
   }
 
   get tokenDayData(): TokenDayDataLoader {
@@ -631,22 +627,6 @@ export class Pair extends Entity {
     );
   }
 
-  get liquidityPositions(): LiquidityPositionLoader {
-    return new LiquidityPositionLoader(
-      "Pair",
-      this.get("id")!.toString(),
-      "liquidityPositions"
-    );
-  }
-
-  get liquidityPositionSnapshots(): LiquidityPositionSnapshotLoader {
-    return new LiquidityPositionSnapshotLoader(
-      "Pair",
-      this.get("id")!.toString(),
-      "liquidityPositionSnapshots"
-    );
-  }
-
   get mints(): MintLoader {
     return new MintLoader("Pair", this.get("id")!.toString(), "mints");
   }
@@ -699,14 +679,6 @@ export class User extends Entity {
     this.set("id", Value.fromString(value));
   }
 
-  get liquidityPositions(): LiquidityPositionLoader {
-    return new LiquidityPositionLoader(
-      "User",
-      this.get("id")!.toString(),
-      "liquidityPositions"
-    );
-  }
-
   get usdSwapped(): BigDecimal {
     let value = this.get("usdSwapped");
     if (!value || value.kind == ValueKind.NULL) {
@@ -718,292 +690,6 @@ export class User extends Entity {
 
   set usdSwapped(value: BigDecimal) {
     this.set("usdSwapped", Value.fromBigDecimal(value));
-  }
-}
-
-export class LiquidityPosition extends Entity {
-  constructor(id: string) {
-    super();
-    this.set("id", Value.fromString(id));
-  }
-
-  save(): void {
-    let id = this.get("id");
-    assert(id != null, "Cannot save LiquidityPosition entity without an ID");
-    if (id) {
-      assert(
-        id.kind == ValueKind.STRING,
-        `Entities of type LiquidityPosition must have an ID of type String but the id '${id.displayData()}' is of type ${id.displayKind()}`
-      );
-      store.set("LiquidityPosition", id.toString(), this);
-    }
-  }
-
-  static loadInBlock(id: string): LiquidityPosition | null {
-    return changetype<LiquidityPosition | null>(
-      store.get_in_block("LiquidityPosition", id)
-    );
-  }
-
-  static load(id: string): LiquidityPosition | null {
-    return changetype<LiquidityPosition | null>(
-      store.get("LiquidityPosition", id)
-    );
-  }
-
-  get id(): string {
-    let value = this.get("id");
-    if (!value || value.kind == ValueKind.NULL) {
-      throw new Error("Cannot return null for a required field.");
-    } else {
-      return value.toString();
-    }
-  }
-
-  set id(value: string) {
-    this.set("id", Value.fromString(value));
-  }
-
-  get user(): string {
-    let value = this.get("user");
-    if (!value || value.kind == ValueKind.NULL) {
-      throw new Error("Cannot return null for a required field.");
-    } else {
-      return value.toString();
-    }
-  }
-
-  set user(value: string) {
-    this.set("user", Value.fromString(value));
-  }
-
-  get pair(): string {
-    let value = this.get("pair");
-    if (!value || value.kind == ValueKind.NULL) {
-      throw new Error("Cannot return null for a required field.");
-    } else {
-      return value.toString();
-    }
-  }
-
-  set pair(value: string) {
-    this.set("pair", Value.fromString(value));
-  }
-
-  get liquidityTokenBalance(): BigDecimal {
-    let value = this.get("liquidityTokenBalance");
-    if (!value || value.kind == ValueKind.NULL) {
-      throw new Error("Cannot return null for a required field.");
-    } else {
-      return value.toBigDecimal();
-    }
-  }
-
-  set liquidityTokenBalance(value: BigDecimal) {
-    this.set("liquidityTokenBalance", Value.fromBigDecimal(value));
-  }
-}
-
-export class LiquidityPositionSnapshot extends Entity {
-  constructor(id: string) {
-    super();
-    this.set("id", Value.fromString(id));
-  }
-
-  save(): void {
-    let id = this.get("id");
-    assert(
-      id != null,
-      "Cannot save LiquidityPositionSnapshot entity without an ID"
-    );
-    if (id) {
-      assert(
-        id.kind == ValueKind.STRING,
-        `Entities of type LiquidityPositionSnapshot must have an ID of type String but the id '${id.displayData()}' is of type ${id.displayKind()}`
-      );
-      store.set("LiquidityPositionSnapshot", id.toString(), this);
-    }
-  }
-
-  static loadInBlock(id: string): LiquidityPositionSnapshot | null {
-    return changetype<LiquidityPositionSnapshot | null>(
-      store.get_in_block("LiquidityPositionSnapshot", id)
-    );
-  }
-
-  static load(id: string): LiquidityPositionSnapshot | null {
-    return changetype<LiquidityPositionSnapshot | null>(
-      store.get("LiquidityPositionSnapshot", id)
-    );
-  }
-
-  get id(): string {
-    let value = this.get("id");
-    if (!value || value.kind == ValueKind.NULL) {
-      throw new Error("Cannot return null for a required field.");
-    } else {
-      return value.toString();
-    }
-  }
-
-  set id(value: string) {
-    this.set("id", Value.fromString(value));
-  }
-
-  get liquidityPosition(): string {
-    let value = this.get("liquidityPosition");
-    if (!value || value.kind == ValueKind.NULL) {
-      throw new Error("Cannot return null for a required field.");
-    } else {
-      return value.toString();
-    }
-  }
-
-  set liquidityPosition(value: string) {
-    this.set("liquidityPosition", Value.fromString(value));
-  }
-
-  get timestamp(): i32 {
-    let value = this.get("timestamp");
-    if (!value || value.kind == ValueKind.NULL) {
-      return 0;
-    } else {
-      return value.toI32();
-    }
-  }
-
-  set timestamp(value: i32) {
-    this.set("timestamp", Value.fromI32(value));
-  }
-
-  get block(): i32 {
-    let value = this.get("block");
-    if (!value || value.kind == ValueKind.NULL) {
-      return 0;
-    } else {
-      return value.toI32();
-    }
-  }
-
-  set block(value: i32) {
-    this.set("block", Value.fromI32(value));
-  }
-
-  get user(): string {
-    let value = this.get("user");
-    if (!value || value.kind == ValueKind.NULL) {
-      throw new Error("Cannot return null for a required field.");
-    } else {
-      return value.toString();
-    }
-  }
-
-  set user(value: string) {
-    this.set("user", Value.fromString(value));
-  }
-
-  get pair(): string {
-    let value = this.get("pair");
-    if (!value || value.kind == ValueKind.NULL) {
-      throw new Error("Cannot return null for a required field.");
-    } else {
-      return value.toString();
-    }
-  }
-
-  set pair(value: string) {
-    this.set("pair", Value.fromString(value));
-  }
-
-  get token0PriceUSD(): BigDecimal {
-    let value = this.get("token0PriceUSD");
-    if (!value || value.kind == ValueKind.NULL) {
-      throw new Error("Cannot return null for a required field.");
-    } else {
-      return value.toBigDecimal();
-    }
-  }
-
-  set token0PriceUSD(value: BigDecimal) {
-    this.set("token0PriceUSD", Value.fromBigDecimal(value));
-  }
-
-  get token1PriceUSD(): BigDecimal {
-    let value = this.get("token1PriceUSD");
-    if (!value || value.kind == ValueKind.NULL) {
-      throw new Error("Cannot return null for a required field.");
-    } else {
-      return value.toBigDecimal();
-    }
-  }
-
-  set token1PriceUSD(value: BigDecimal) {
-    this.set("token1PriceUSD", Value.fromBigDecimal(value));
-  }
-
-  get reserve0(): BigDecimal {
-    let value = this.get("reserve0");
-    if (!value || value.kind == ValueKind.NULL) {
-      throw new Error("Cannot return null for a required field.");
-    } else {
-      return value.toBigDecimal();
-    }
-  }
-
-  set reserve0(value: BigDecimal) {
-    this.set("reserve0", Value.fromBigDecimal(value));
-  }
-
-  get reserve1(): BigDecimal {
-    let value = this.get("reserve1");
-    if (!value || value.kind == ValueKind.NULL) {
-      throw new Error("Cannot return null for a required field.");
-    } else {
-      return value.toBigDecimal();
-    }
-  }
-
-  set reserve1(value: BigDecimal) {
-    this.set("reserve1", Value.fromBigDecimal(value));
-  }
-
-  get reserveUSD(): BigDecimal {
-    let value = this.get("reserveUSD");
-    if (!value || value.kind == ValueKind.NULL) {
-      throw new Error("Cannot return null for a required field.");
-    } else {
-      return value.toBigDecimal();
-    }
-  }
-
-  set reserveUSD(value: BigDecimal) {
-    this.set("reserveUSD", Value.fromBigDecimal(value));
-  }
-
-  get liquidityTokenTotalSupply(): BigDecimal {
-    let value = this.get("liquidityTokenTotalSupply");
-    if (!value || value.kind == ValueKind.NULL) {
-      throw new Error("Cannot return null for a required field.");
-    } else {
-      return value.toBigDecimal();
-    }
-  }
-
-  set liquidityTokenTotalSupply(value: BigDecimal) {
-    this.set("liquidityTokenTotalSupply", Value.fromBigDecimal(value));
-  }
-
-  get liquidityTokenBalance(): BigDecimal {
-    let value = this.get("liquidityTokenBalance");
-    if (!value || value.kind == ValueKind.NULL) {
-      throw new Error("Cannot return null for a required field.");
-    } else {
-      return value.toBigDecimal();
-    }
-  }
-
-  set liquidityTokenBalance(value: BigDecimal) {
-    this.set("liquidityTokenBalance", Value.fromBigDecimal(value));
   }
 }
 
@@ -2610,42 +2296,6 @@ export class PairHourDataLoader extends Entity {
   load(): PairHourData[] {
     let value = store.loadRelated(this._entity, this._id, this._field);
     return changetype<PairHourData[]>(value);
-  }
-}
-
-export class LiquidityPositionLoader extends Entity {
-  _entity: string;
-  _field: string;
-  _id: string;
-
-  constructor(entity: string, id: string, field: string) {
-    super();
-    this._entity = entity;
-    this._id = id;
-    this._field = field;
-  }
-
-  load(): LiquidityPosition[] {
-    let value = store.loadRelated(this._entity, this._id, this._field);
-    return changetype<LiquidityPosition[]>(value);
-  }
-}
-
-export class LiquidityPositionSnapshotLoader extends Entity {
-  _entity: string;
-  _field: string;
-  _id: string;
-
-  constructor(entity: string, id: string, field: string) {
-    super();
-    this._entity = entity;
-    this._id = id;
-    this._field = field;
-  }
-
-  load(): LiquidityPositionSnapshot[] {
-    let value = store.loadRelated(this._entity, this._id, this._field);
-    return changetype<LiquidityPositionSnapshot[]>(value);
   }
 }
 

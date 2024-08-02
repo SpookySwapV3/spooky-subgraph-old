@@ -153,19 +153,19 @@ export class ERC20 extends ethereum.SmartContract {
     return ethereum.CallResult.fromValue(value[0].toBoolean());
   }
 
-  decimals(): i32 {
-    let result = super.call("decimals", "decimals():(uint8)", []);
+  decimals(): BigInt {
+    let result = super.call("decimals", "decimals():(uint32)", []);
 
-    return result[0].toI32();
+    return result[0].toBigInt();
   }
 
-  try_decimals(): ethereum.CallResult<i32> {
-    let result = super.tryCall("decimals", "decimals():(uint8)", []);
+  try_decimals(): ethereum.CallResult<BigInt> {
+    let result = super.tryCall("decimals", "decimals():(uint32)", []);
     if (result.reverted) {
       return new ethereum.CallResult();
     }
     let value = result.value;
-    return ethereum.CallResult.fromValue(value[0].toI32());
+    return ethereum.CallResult.fromValue(value[0].toBigInt());
   }
 
   balanceOf(_owner: Address): BigInt {

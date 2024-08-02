@@ -1,24 +1,19 @@
-specVersion: 0.0.5
-description: SpookySwap is a decentralized protocol for automated token exchange on Fantom.
-repository: https://github.com/SpookySwapV3/spooky-subgraph
+specVersion: 0.0.4
+description: Uniswap is a decentralized protocol for automated token exchange on Ethereum.
+repository: https://github.com/Uniswap/uniswap-v2-subgraph
 schema:
   file: ./schema.graphql
-# features:
-#   - grafting
-# graft:
-#   base: QmPJbGjktGa7c4UYWXvDRajPxpuJBSZxeQK5siNT3VpthP
-#   block: 65245749
 dataSources:
   - kind: ethereum/contract
     name: Factory
-    network: btt
+    network: mainnet
     source:
       address: '0xEE4bC42157cf65291Ba2FE839AE127e3Cc76f741'
       abi: Factory
       startBlock: 2189017
     mapping:
       kind: ethereum/events
-      apiVersion: 0.0.6
+      apiVersion: 0.0.7
       language: wasm/assemblyscript
       file: ./src/mappings/factory.ts
       entities:
@@ -39,12 +34,12 @@ dataSources:
 templates:
   - kind: ethereum/contract
     name: Pair
-    network: btt
+    network: mainnet
     source:
       abi: Pair
     mapping:
       kind: ethereum/events
-      apiVersion: 0.0.6
+      apiVersion: 0.0.7
       language: wasm/assemblyscript
       file: ./src/mappings/core.ts
       entities:
