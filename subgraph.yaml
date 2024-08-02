@@ -13,9 +13,9 @@ dataSources:
     name: Factory
     network: btt
     source:
-      address: '0xee4bc42157cf65291ba2fe839ae127e3cc76f741'
+      address: '0xEE4bC42157cf65291Ba2FE839AE127e3Cc76f741'
       abi: Factory
-      startBlock: 23534368
+      startBlock: 2189017
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.6

@@ -3,14 +3,14 @@ import { Pair, Token, Bundle } from '../types/schema'
 import { BigDecimal, Address, BigInt, ethereum } from '@graphprotocol/graph-ts/index'
 import { ZERO_BD, factoryContract, ADDRESS_ZERO, ONE_BD, UNTRACKED_PAIRS } from './helpers'
 
-const WNATIVE_ADDRESS = '0x23181f21dea5936e24163ffaba4ea3b316b57f3c'
-const USDT_T_WBTT = '0x418afcd6d15fa51d59d6c7f7a5943eb04d5f21f0' // created block 26857087
+const WNATIVE_ADDRESS = '0x7507c1dc16935b82698e4c63f2746a2fcf994df8'
+const USDC_WBERA = '0x6c5ea89943Ecf173823768c3272A15A80D49AAdd' // created block 26857087
 
 export function getEthPriceInUSD(event: ethereum.Event): BigDecimal {
   // fetch eth prices for each stablecoin
-  let usdtNativePair = Pair.load(USDT_T_WBTT) // usdc is token1
+  let usdtNativePair = Pair.load(USDC_WBERA) // usdc is token0
   if (usdtNativePair !== null) {
-    return usdtNativePair.token1Price
+    return usdtNativePair.token0Price
   } else {
     return ZERO_BD
   }
@@ -19,26 +19,15 @@ export function getEthPriceInUSD(event: ethereum.Event): BigDecimal {
 
 // token where amounts should contribute to tracked volume and liquidity
 let WHITELIST: string[] = [
-  '0x23181f21dea5936e24163ffaba4ea3b316b57f3c', // WBTTC
-  '0xad9a21ff0c9d854ca8c1360af28d4fcbdac53b4f', // FTM_e
-  '0x43559b1786c06d6b826e3cf9aa667ed8840f9106', // ADA_b
-  '0x1249c65afb11d179ffb3ce7d4eedd1d9b98ad006', // ETH
-  '0x17f235fd5974318e4e2a5e37919a209f7c37a6d1', // USDD_t
-  '0xdb28719f7f938507dbfe4f0eae55668903d34a15', // USDT_t
-  '0xe887512ab8bc60bcc9224e1c3b5be68e26048b8b', // USDT_e
-  '0xae17940943ba9440540940db0f1877f101d39e8b', // USDC_e
-  '0xca424b845497f7204d9301bd13ff87c0e2e86fcf', // USDC_b
-  '0x9888221fe6b5a2ad4ce7266c7826d2ad74d40ccf', // WBTC__e
-  '0xfd3b093ab6bd4f40810f19e5ff822ac8cc7e3184', // LINK_e
-  '0xedf53026aea60f8f75fca25f8830b7e2d6200662', // TRX
-  '0x185a4091027e2db459a2433f85f894dc3013aeb5', // BNB
+  WNATIVE_ADDRESS,
+  '0x153a59e72bcfaf9bdb8d3864945d44595856a970'
 ]
 
 // minimum liquidity required to count towards tracked volume for pairs with small # of Lps
 let MINIMUM_USD_THRESHOLD_NEW_PAIRS = BigDecimal.fromString('10000')
 
 // minimum liquidity for price to get tracked
-let MINIMUM_LIQUIDITY_THRESHOLD_ETH = BigDecimal.fromString('200')
+let MINIMUM_LIQUIDITY_THRESHOLD_ETH = BigDecimal.fromString('1')
 
 /**
  * Search through graph to find derived Eth per token.
