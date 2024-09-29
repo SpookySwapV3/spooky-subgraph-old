@@ -11,16 +11,16 @@ export class TokenDefinition {
   static getStaticDefinitions(): Array<TokenDefinition> {
     const staticDefinitions: Array<TokenDefinition> = [
       {
-        address: Address.fromString('0x7507c1dc16935b82698e4c63f2746a2fcf994df8'),
-        symbol: 'WBera',
-        name: 'Wrapped Bera',
+        address: Address.fromString('0xd31686e65f17542c7019b22b2e6a0c71e72aa8dd'),
+        symbol: 'WS',
+        name: 'Wrapped Sonic',
         decimals: BigInt.fromI32(18),
       },
       {
-        address: Address.fromString('0x153a59e72bcfaf9bdb8d3864945d44595856a970'),
+        address: Address.fromString('0xaf93888cbd250300470a1618206e036e11470149'),
         symbol: 'mUSDC',
-        name: 'Mock USDC',
-        decimals: BigInt.fromI32(6),
+        name: 'Mock USDC (Coral)',
+        decimals: BigInt.fromI32(18),
       },
     ]
     return staticDefinitions

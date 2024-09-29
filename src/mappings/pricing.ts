@@ -4,8 +4,10 @@ import { Address, BigDecimal, BigInt } from '@graphprotocol/graph-ts/index'
 import { Bundle, Pair, Token } from '../types/schema'
 import { ADDRESS_ZERO, factoryContract, ONE_BD, UNTRACKED_PAIRS, ZERO_BD } from './helpers'
 
-const WETH_ADDRESS = '0x7507c1dc16935b82698e4c63f2746a2fcf994df8'
-const USDC_WETH_PAIR = '0x6c5ea89943Ecf173823768c3272A15A80D49AAdd' // created 10008355
+const WETH_ADDRESS = '0xd31686e65f17542c7019b22b2e6a0c71e72aa8dd'
+
+//Note: for testnet were using coral as usdc pair since its just for testing it shouldn't matter
+const USDC_WETH_PAIR = '0x08d7eeded117f487c0b380cb82bcb133c2a998d1' // created 10008355
 
 export function getEthPriceInUSD(): BigDecimal {
   let usdcPair = Pair.load(USDC_WETH_PAIR) // usdc is token0
@@ -20,7 +22,7 @@ export function getEthPriceInUSD(): BigDecimal {
 // token where amounts should contribute to tracked volume and liquidity
 let WHITELIST: string[] = [
   WETH_ADDRESS, // WETH
-  '0x153a59e72bcfaf9bdb8d3864945d44595856a970', // USDC
+  '0xaf93888cbd250300470a1618206e036e11470149', // USDC
 ]
 
 // minimum liquidity required to count towards tracked volume for pairs with small # of Lps
