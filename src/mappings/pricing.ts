@@ -4,10 +4,10 @@ import { Address, BigDecimal, BigInt } from '@graphprotocol/graph-ts/index'
 import { Bundle, Pair, Token } from '../types/schema'
 import { ADDRESS_ZERO, factoryContract, ONE_BD, UNTRACKED_PAIRS, ZERO_BD } from './helpers'
 
-const WETH_ADDRESS = '0xd31686e65f17542c7019b22b2e6a0c71e72aa8dd'
+const WETH_ADDRESS = '0xee4bc42157cf65291ba2fe839ae127e3cc76f741'
 
 //Note: for testnet were using coral as usdc pair since its just for testing it shouldn't matter
-const USDC_WETH_PAIR = '0x08d7eeded117f487c0b380cb82bcb133c2a998d1' // created 10008355
+const USDC_WETH_PAIR = '0x21a4692151fb8681a945a58216e7125dc389dc6d' // created 10008355
 
 export function getEthPriceInUSD(): BigDecimal {
   let usdcPair = Pair.load(USDC_WETH_PAIR) // usdc is token0
@@ -26,10 +26,10 @@ let WHITELIST: string[] = [
 ]
 
 // minimum liquidity required to count towards tracked volume for pairs with small # of Lps
-let MINIMUM_USD_THRESHOLD_NEW_PAIRS = BigDecimal.fromString('4')
+let MINIMUM_USD_THRESHOLD_NEW_PAIRS = BigDecimal.fromString('0.0001')
 
 // minimum liquidity for price to get tracked
-let MINIMUM_LIQUIDITY_THRESHOLD_ETH = BigDecimal.fromString('1')
+let MINIMUM_LIQUIDITY_THRESHOLD_ETH = BigDecimal.fromString('0.0001')
 
 /**
  * Search through graph to find derived Eth per token.
