@@ -4,7 +4,7 @@ import { Address, BigDecimal, BigInt } from '@graphprotocol/graph-ts/index'
 import { Bundle, Pair, Token } from '../types/schema'
 import { ADDRESS_ZERO, factoryContract, ONE_BD, UNTRACKED_PAIRS, ZERO_BD } from './helpers'
 
-const WETH_ADDRESS = '0xee4bc42157cf65291ba2fe839ae127e3cc76f741'
+const WETH_ADDRESS = '0xbc10000000000000000000000000000000000000'
 
 //Note: for testnet were using coral as usdc pair since its just for testing it shouldn't matter
 const USDC_WETH_PAIR = '0x21a4692151fb8681a945a58216e7125dc389dc6d' // created 10008355
