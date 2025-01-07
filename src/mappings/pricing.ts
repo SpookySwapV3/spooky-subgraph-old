@@ -7,7 +7,7 @@ import { ADDRESS_ZERO, factoryContract, ONE_BD, UNTRACKED_PAIRS, ZERO_BD } from 
 const WETH_ADDRESS = '0x039e2fb66102314ce7b64ce5ce3e5183bc94ad38'
 
 //Note: for testnet were using coral as usdc pair since its just for testing it shouldn't matter
-const USDC_WETH_PAIR = '0x6cC7e9BB6C020CF18A44b0593cf110A16Df32C0C' // created 10008355
+const USDC_WETH_PAIR = '0x6cc7e9bb6c020cf18a44b0593cf110a16df32c0c' // created 10008355
 
 export function getEthPriceInUSD(): BigDecimal {
   let usdcPair = Pair.load(USDC_WETH_PAIR) // usdc is token1
@@ -22,7 +22,7 @@ export function getEthPriceInUSD(): BigDecimal {
 // token where amounts should contribute to tracked volume and liquidity
 let WHITELIST: string[] = [
   WETH_ADDRESS, // WETH
-  '0x29219dd400f2Bf60E5a23d13Be72B486D4038894', // USDC
+  '0x29219dd400f2bf60e5a23d13be72b486d4038894', // USDC
 ]
 
 // minimum liquidity required to count towards tracked volume for pairs with small # of Lps
