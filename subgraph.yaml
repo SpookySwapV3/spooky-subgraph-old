@@ -6,11 +6,11 @@ schema:
 dataSources:
   - kind: ethereum/contract
     name: Factory
-    network: sonic
+    network: goat
     source:
-      address: '0xEE4bC42157cf65291Ba2FE839AE127e3Cc76f741'
+      address: '0x7928a2c48754501f3a8064765ecae541dae5c3e6'
       abi: Factory
-      startBlock: 285950
+      startBlock: 108140
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.7
@@ -34,7 +34,7 @@ dataSources:
 templates:
   - kind: ethereum/contract
     name: Pair
-    network: sonic
+    network: goat
     source:
       abi: Pair
     mapping:
