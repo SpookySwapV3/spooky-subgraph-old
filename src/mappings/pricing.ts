@@ -3,8 +3,8 @@ import { Pair, Token, Bundle } from '../types/schema'
 import { BigDecimal, Address, BigInt } from '@graphprotocol/graph-ts/index'
 import { ZERO_BD, factoryContract, ADDRESS_ZERO, ONE_BD } from './helpers'
 
-const WETH_ADDRESS = '0xf5cb8652a84329a2016a386206761f455bcedab6'
-const USDC_WETH_PAIR = '0x5f7e79b3ed397ccca274f0cec6ac0517c2173c68' // created
+const WETH_ADDRESS = '0xbc10000000000000000000000000000000000000'
+const USDC_WETH_PAIR = '0xed435c20dba7fad4fc1423a4202ee55354c4c2a7' // created
 //const DAI_WETH_PAIR = '0xe120ffbda0d14f3bb6d6053e90e63c572a66a428' // created block 
 //const USDT_WETH_PAIR = '0x5965e53aa80a0bcf1cd6dbdd72e6a9b2aa047410' // created block 
 
@@ -21,15 +21,15 @@ export function getEthPriceInUSD(): BigDecimal {
 
 // token where amounts should contribute to tracked volume and liquidity
 let WHITELIST: string[] = [
-  '0xf5cb8652a84329a2016a386206761f455bcedab6', // wftm
-  '0x07ca47917dc05f84b44c629a54247e45a88bf2f4', // USDC
+  WETH_ADDRESS, // wftm
+  '0x5c5dc36c98d151d5410eefc16dbb096f7f99523b', // USDC
 ]
 
 // minimum liquidity required to count towards tracked volume for pairs with small # of Lps
-let MINIMUM_USD_THRESHOLD_NEW_PAIRS = BigDecimal.fromString('400000')
+let MINIMUM_USD_THRESHOLD_NEW_PAIRS = BigDecimal.fromString('0.00000000000001')
 
 // minimum liquidity for price to get tracked
-let MINIMUM_LIQUIDITY_THRESHOLD_ETH = BigDecimal.fromString('4000')
+let MINIMUM_LIQUIDITY_THRESHOLD_ETH = BigDecimal.fromString('0.00000000000001')
 
 /**
  * Search through graph to find derived Eth per token.
