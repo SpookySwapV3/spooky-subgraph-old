@@ -4,7 +4,7 @@ import { BigDecimal, Address, BigInt } from '@graphprotocol/graph-ts/index'
 import { ZERO_BD, factoryContract, ADDRESS_ZERO, ONE_BD } from './helpers'
 
 const WETH_ADDRESS = '0xbc10000000000000000000000000000000000000'
-const USDC_WETH_PAIR = '0xed435c20dba7fad4fc1423a4202ee55354c4c2a7' // created
+const USDC_WETH_PAIR = '0x5c09397b4424df2cae1b31a4b501a9d21e77af3a' // created
 //const DAI_WETH_PAIR = '0xe120ffbda0d14f3bb6d6053e90e63c572a66a428' // created block 
 //const USDT_WETH_PAIR = '0x5965e53aa80a0bcf1cd6dbdd72e6a9b2aa047410' // created block 
 
@@ -12,7 +12,7 @@ export function getEthPriceInUSD(): BigDecimal {
   //For now we will only use USDC_WETH pair for ETH prices
   let usdcPair = Pair.load(USDC_WETH_PAIR);
   if (usdcPair !== null) {
-    return usdcPair.token0Price
+    return usdcPair.token1Price
   }
   else {
     return ZERO_BD
@@ -22,7 +22,7 @@ export function getEthPriceInUSD(): BigDecimal {
 // token where amounts should contribute to tracked volume and liquidity
 let WHITELIST: string[] = [
   WETH_ADDRESS, // wftm
-  '0x5c5dc36c98d151d5410eefc16dbb096f7f99523b', // USDC
+  '0xe1ad845d93853fff44990ae0dcecd8575293681e', // USDC
 ]
 
 // minimum liquidity required to count towards tracked volume for pairs with small # of Lps
