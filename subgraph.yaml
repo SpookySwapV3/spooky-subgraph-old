@@ -6,11 +6,11 @@ schema:
 dataSources:
   - kind: ethereum/contract
     name: Factory
-    network: goat
+    network: monad-testnet
     source:
-      address: '0xbF8c8B5D27e76890416eA95a50d4732BB4906741'
+      address: '0x7928a2c48754501f3a8064765ECaE541daE5c3E6'
       abi: Factory
-      startBlock: 1828946
+      startBlock: 7734092
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.6
@@ -34,7 +34,7 @@ dataSources:
 templates:
   - kind: ethereum/contract
     name: Pair
-    network: goat
+    network: monad-testnet
     source:
       abi: Pair
     mapping:
