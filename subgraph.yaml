@@ -6,11 +6,11 @@ schema:
 dataSources:
   - kind: ethereum/contract
     name: Factory
-    network: arbitrum-one
+    network: monad
     source:
-      address: '0x60050E4a491b24ADF36Fe184f994dE985641c747'
+      address: '0xfefdf9234e29dc435d5d04ebe425a0c70d2a1824'
       abi: Factory
-      startBlock: 334641607
+      startBlock: 37779440
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.6
@@ -34,7 +34,7 @@ dataSources:
 templates:
   - kind: ethereum/contract
     name: Pair
-    network: arbitrum-one
+    network: monad
     source:
       abi: Pair
     mapping:
